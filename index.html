@@ -133,101 +133,188 @@
 			var locale = queryParams["lc"] || "en";
 
 			var Localization = {
-			  translate: function(lcKey, value) {
-				var loc = this.locales[this.currentLocale];
-				var translation = loc[lcKey];
-				return translation[loc.plural(value)];
-			  },
+				translate: function (lcKey, value) {
+					var loc = this.locales[this.currentLocale] || this.locales.en;
+					var translation = loc[lcKey];
 
-			  currentLocale: locale,
+					// Safety: if a key is missing in a locale, fall back to English for that key.
+					if (!translation) translation = this.locales.en[lcKey];
 
-			  locales: {
-				en: {
-				  D: [" DAY", " DAYS"],
-				  H: [" HOUR", " HOURS"],
-				  M: [" MINUTE", " MINUTES"],
-			      S: [" SECOND", " SECONDS"],
-				  IN: ["IN"],
-				  AGO: ["AGO"],
-				  DOWNLOAD: ["Download Timepage to create a countdown on your iPhone or iPad."],
-				  plural: function(nr) {
-          			return (nr == 1) ? 0 : 1;
-        		  }
+					return translation[loc.plural(value)];
 				},
-				fr: {
-				  D: [" JOUR", " JOURS"],
-				  H: [" HEURE", " HEURES"],
-				  M: [" MINUTE", " MINUTES"],
-			      S: [" SECONDE", " SECONDES"],
-				  IN: ["DANS"],
-				  AGO: ["DEPUIS"],
-				  DOWNLOAD: ["Téléchargez Timepage pour créer un compte à rebours sur votre iPhone ou votre iPad."],
-				  plural: function(nr) {
-          			return (nr == 1) ? 0 : 1;
-        		  }
-				},
-				it: {
-				  D: [" GIORNO", " GIORNI"],
-				  H: [" ORA", " ORE"],
-				  M: [" MINUTO", " MINUTI"],
-			      S: [" SECONDO", " SECONDI"],
-				  IN: ["TRA"],
-				  AGO: ["FA"],
-				  DOWNLOAD: ["Scarica Timepage per crare un conto alla rovescia sul tuo iPhone o iPad."],
-				  plural: function(nr) {
-          			return (nr == 1) ? 0 : 1;
-        		  }
-				},
-				de: {
-				  D: [" TAG", " TAGE"],
-				  H: [" STUNDE", " STUNDEN"],
-				  M: [" MINUTE", " MINUTEN"],
-			      S: [" SEKUNDE", " SEKUNDEN"],
-				  IN: ["IN"],
-				  AGO: ["VOR"],
-				  DOWNLOAD: ["Timepage herunterladen, um auf Ihrem iPhone oder iPad einen Countdown zu erstellen."],
-				  plural: function(nr) {
-          			return (nr == 1) ? 0 : 1;
-        		  }
-				},
-				ja: {
-				  D: ["日"],
-				  H: ["時間"],
-				  M: ["分"],
-			      S: ["秒"],
-				  IN: ["あと"],
-				  AGO: ["前"],
-				  DOWNLOAD: ["Timepageをダウンロードして、iPhoneまたはiPadでカウントダウンを作成します。"],
-				  plural: function(nr) {
-          			return 0;
-        		  }
-				},
-				zhHans: {
-				  D: ["天"],
-				  H: ["小时"],
-				  M: ["分钟"],
-			      S: ["秒钟"],
-				  IN: ["于"],
-				  AGO: ["前"],
-				  DOWNLOAD: ["下载Timepage，给您的iPhone或iPad创建倒计时。"],
-				  plural: function(nr) {
-          			return 0;
-        		  }
-				},
-				zhHant: {
-				  D: ["天"],
-				  H: ["小時"],
-				  M: ["分鐘"],
-			      S: ["秒"],
-				  IN: ["還有"],
-				  AGO: ["前"],
-				  DOWNLOAD: ["下載 Timepage，在您的 iPhone 或 iPad 倒數計時。"],
-				  plural: function(nr) {
-          			return 0;
-        		  }
+
+				currentLocale: locale,
+
+				locales: {
+					en: {
+						D: [" DAY", " DAYS"],
+						H: [" HOUR", " HOURS"],
+						M: [" MINUTE", " MINUTES"],
+						S: [" SECOND", " SECONDS"],
+						IN: ["IN"],
+						AGO: ["AGO"],
+						DOWNLOAD: ["Download Timepage to create a countdown on iPhone, iPad or Mac."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					fr: {
+						D: [" JOUR", " JOURS"],
+						H: [" HEURE", " HEURES"],
+						M: [" MINUTE", " MINUTES"],
+						S: [" SECONDE", " SECONDES"],
+						IN: ["DANS"],
+						AGO: ["DEPUIS"],
+						DOWNLOAD: ["Téléchargez Timepage pour créer un compte à rebours sur iPhone, iPad ou Mac."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					it: {
+						D: [" GIORNO", " GIORNI"],
+						H: [" ORA", " ORE"],
+						M: [" MINUTO", " MINUTI"],
+						S: [" SECONDO", " SECONDI"],
+						IN: ["TRA"],
+						AGO: ["FA"],
+						DOWNLOAD: ["Scarica Timepage per creare un conto alla rovescia su iPhone, iPad o Mac."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					de: {
+						D: [" TAG", " TAGE"],
+						H: [" STUNDE", " STUNDEN"],
+						M: [" MINUTE", " MINUTEN"],
+						S: [" SEKUNDE", " SEKUNDEN"],
+						IN: ["IN"],
+						AGO: ["VOR"],
+						DOWNLOAD: ["Laden Sie Timepage herunter, um einen Countdown auf iPhone, iPad oder Mac zu erstellen."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					ja: {
+						D: ["日"],
+						H: ["時間"],
+						M: ["分"],
+						S: ["秒"],
+						IN: ["あと"],
+						AGO: ["前"],
+						DOWNLOAD: ["Timepageをダウンロードして、iPhone、iPad、またはMacでカウントダウンを作成します。"],
+						plural: function (nr) {
+							return 0;
+						}
+					},
+
+					zhHans: {
+						D: ["天"],
+						H: ["小时"],
+						M: ["分钟"],
+						S: ["秒钟"],
+						IN: ["于"],
+						AGO: ["前"],
+						DOWNLOAD: ["下载 Timepage，在 iPhone、iPad 或 Mac 上创建倒计时。"],
+						plural: function (nr) {
+							return 0;
+						}
+					},
+
+					zhHant: {
+						D: ["天"],
+						H: ["小時"],
+						M: ["分鐘"],
+						S: ["秒"],
+						IN: ["還有"],
+						AGO: ["前"],
+						DOWNLOAD: ["下載 Timepage，在 iPhone、iPad 或 Mac 上建立倒數計時。"],
+						plural: function (nr) {
+							return 0;
+						}
+					},
+
+					tr: {
+						D: [" GÜN", " GÜN"],
+						H: [" SAAT", " SAAT"],
+						M: [" DAKİKA", " DAKİKA"],
+						S: [" SANİYE", " SANİYE"],
+						IN: ["İÇİNDE"],
+						AGO: ["ÖNCE"],
+						DOWNLOAD: ["iPhone, iPad veya Mac’te geri sayım oluşturmak için Timepage’i indirin."],
+						plural: function (nr) {
+							// Turkish does not inflect for plural in this usage.
+							return 0;
+						}
+					},
+
+					es: {
+						D: [" DÍA", " DÍAS"],
+						H: [" HORA", " HORAS"],
+						M: [" MINUTO", " MINUTOS"],
+						S: [" SEGUNDO", " SEGUNDOS"],
+						IN: ["EN"],
+						AGO: ["HACE"],
+						DOWNLOAD: ["Descarga Timepage para crear una cuenta atrás en iPhone, iPad o Mac."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					ptBR: {
+						D: [" DIA", " DIAS"],
+						H: [" HORA", " HORAS"],
+						M: [" MINUTO", " MINUTOS"],
+						S: [" SEGUNDO", " SEGUNDOS"],
+						IN: ["EM"],
+						AGO: ["ATRÁS"],
+						DOWNLOAD: ["Baixe o Timepage para criar uma contagem regressiva no iPhone, iPad ou Mac."],
+						plural: function (nr) {
+							return nr == 1 ? 0 : 1;
+						}
+					},
+
+					ko: {
+						D: ["일"],
+						H: ["시간"],
+						M: ["분"],
+						S: ["초"],
+						IN: ["후"],
+						AGO: ["전"],
+						DOWNLOAD: ["Timepage를 다운로드하여 iPhone, iPad 또는 Mac에서 카운트다운을 만드세요."],
+						plural: function (nr) {
+							return 0;
+						}
+					},
+
+					ru: {
+						// Russian has 3 plural forms for these units.
+						// Keep the rest of your structure the same by using 3 strings per unit.
+						D: [" ДЕНЬ", " ДНЯ", " ДНЕЙ"],
+						H: [" ЧАС", " ЧАСА", " ЧАСОВ"],
+						M: [" МИНУТА", " МИНУТЫ", " МИНУТ"],
+						S: [" СЕКУНДА", " СЕКУНДЫ", " СЕКУНД"],
+						IN: ["ЧЕРЕЗ"],
+						AGO: ["НАЗАД"],
+						DOWNLOAD: ["Скачайте Timepage, чтобы создать обратный отсчёт на iPhone, iPad или Mac."],
+						plural: function (nr) {
+							// 0: singular (1, 21, 31...) excluding 11
+							// 1: paucal (2-4, 22-24...) excluding 12-14
+							// 2: plural (0, 5-20, 25-30, 11-14...)
+							nr = Math.abs(nr) % 100;
+							var n1 = nr % 10;
+							if (nr > 10 && nr < 20) return 2;
+							if (n1 > 1 && n1 < 5) return 1;
+							if (n1 == 1) return 0;
+							return 2;
+						}
+					}
 				}
-			  }
 			};
+
 
 			var daysWrapper = $('#daysWrapper');
 			var hoursWrapper = $('#hoursWrapper');
