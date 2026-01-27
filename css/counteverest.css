@@ -1,140 +1,169 @@
-/* Timepage Theme ----------------------------------------------------------------- */
+/* Base ------------------------------------------------------------------------ */
 
-#tp-countdown-icon {
-	height: 30vmin;
-	margin: auto;
-	display: block;
+:root {
+  font-size: min(2.8vh, min(3.8vw, 16px));
 }
 
-#tp-countdown-event-title {
-	width: 60vw;
-	margin: auto;
-	line-height: 0.9;
-	font-size: 5.4vmin;
-	font-weight: 200;
-	text-align: center;
-	display: block;
+:root,
+body {
+  height: 100svh;
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
 }
 
-#tp-countdown-in, #tp-countdown-ago {
-	padding-top: 2vmin;
-	font-size: 2vmin;
-	font-weight: 200;
-	text-align: center;
-	display: block;
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.timepage-theme {
-	text-align: center;
-	text-transform: lowercase;
+main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5vmin 0;
+  background: #1d2424;
 }
 
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5vmin;
+  font-size: 1.5rem;
+  text-align: center;
+  background: black;
+}
+
+/* Countdown ------------------------------------------------------------------- */
+
+.ce-countdown {
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Timepage theme -------------------------------------------------------------- */
 /* TODO: Font for Non-Mac/iOS viewers without Avenir Next */
-#main,
+
+main,
 .timepage-theme,
 #tp-countdown-in,
 #tp-countdown-event-title,
 #tp-download-text {
-	font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
 
-#tp-countdown-top-line {
-	padding-top: 4vmin;
-	padding-bottom: 1vmin;
-	line-height: 0.9;
-	font-size: 9vmin;
-	display: block;
-	color: #e6543e;
-}
-
-#tp-countdown-bottom-line {
-	line-height: 0.9;
-	font-size: 2vmin;
-	display: block;
+.timepage-theme {
+  text-align: center;
+  text-transform: lowercase;
 }
 
 .timepage-theme .ce-days,
 .timepage-theme .ce-hours,
 .timepage-theme .ce-minutes,
 .timepage-theme .ce-seconds {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .timepage-theme .ce-days-label,
 .timepage-theme .ce-hours-label,
 .timepage-theme .ce-minutes-label,
 .timepage-theme .ce-seconds-label {
-	font-weight: 200;
-	text-transform: uppercase;
+  font-weight: 200;
+  text-transform: uppercase;
+}
+
+#tp-countdown-icon {
+  display: block;
+  height: 7rem;
+}
+
+#tp-countdown-event-title {
+  display: block;
+  font-size: 4rem;
+  font-weight: 200;
+  line-height: 0.9;
+  text-align: center;
+}
+
+#tp-countdown-in,
+#tp-countdown-ago {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-align: center;
+}
+
+.tp-countdown-date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#tp-countdown-date {
+  display: inline-flex;
+  margin-top: 4vmin;
+  padding: 1vmin 4vmin;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-align: center;
+  background-color: #000;
+  border-radius: 4vmin;
+}
+
+#tp-countdown-top-line {
+  display: block;
+  padding-bottom: 1vmin;
+  font-size: 4rem;
+  line-height: 1;
+  color: #ff1f00;
+}
+
+#tp-countdown-bottom-line {
+  display: block;
+  font-size: 1.3rem;
+  line-height: 1;
 }
 
 #tp-app-icon {
-	width: 20vmin;
-	margin: auto;
-	display: block;
-	max-width: 180px;
-	min-width: 90px;
+  display: block;
+  width: 20vmin;
+  min-width: 90px;
+  max-width: 180px;
+  margin: auto;
 }
 
 #app-store-button {
-	width: 20vmin;
-	margin: auto;
-	display: block;
-	max-width: 200px;
-	min-width: 150px;
+  display: block;
+  width: 20vmin;
+  min-width: 150px;
+  max-width: 200px;
+  margin: auto;
 }
 
 #tp-download-text {
-	font-weight: 200;
-	margin: auto;
-	display: block;
-	font-size: 2.2vmin;
-	width: 60vw;
-	padding: 2vmin;
+  display: block;
+  margin: auto;
+  padding: 2vmin;
+  font-size: 1.3rem;
+  font-weight: 200;
 }
 
-#full {
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	background: #1d2424;
-}
+/* Media queries --------------------------------------------------------------- */
 
-#main {
-	height: auto;
-	background: #1d2424;
-	padding-top: 2vmin;
-	padding-bottom: 5vmin;
-}
+@media (min-width: 600px) {
+  :root {
+    font-size: min(4vh, min(5vw, 28px));
+  }
 
-#footer {
-	padding-top: 3vmin;
-	text-align: center;
-	display: block;
-	height: auto;
-	background: black;
-	flex-grow: 1;
-}
-
-@media all and (max-width: 730px) {
-	#tp-countdown-icon {
-		width: 40vmin;
-		height: auto;
-	}
-	
-	#tp-countdown-event-title {
-		font-size: 8vmin;
-	}
-	
-	#tp-countdown-top-line {
-		font-size: 15vmin;
-	}
-
-	#tp-countdown-bottom-line {
-		font-size: 3.3vmin;
-	}
-	
-	#tp-download-text {
-		font-size: 3vmin;
-	}
+  main > *,
+  footer > * {
+    max-width: 60svw;
+  }
 }
