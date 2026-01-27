@@ -1,421 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="og:title" content="Timepage Countdown"/>
-        <meta property="og:image" content="images/timepage.png"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="Timepage Countdown" />
+    <meta property="og:image" content="images/timepage.png" />
 
-		<!-- Favicon -->
-		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-		<link rel="manifest" href="/manifest.json">
-		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-		<meta name="theme-color" content="#ffffff">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="theme-color" content="#ffffff" />
 
-		<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
 
-		<title>Timepage Countdown</title>
+    <title>Timepage Countdown</title>
 
-		<!-- Load stylesheet -->
-		<link rel="stylesheet" href="css/counteverest.css">
+    <!-- Load stylesheet -->
+    <link rel="stylesheet" href="css/counteverest.css" />
 
-		<!-- Load Google Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,600&amp;subset=latin-ext" rel="stylesheet">
+    <!-- Load Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,600&amp;subset=latin-ext"
+      rel="stylesheet"
+    />
 
-		<style type="text/css">
-			html {
-				display: table;
-				height: 100%;
-				width: 100%;
-			}
+    <script>
+      function getUrlVars() {
+        var vars = [],
+          hash;
+        var hashes = window.location.href
+          .slice(window.location.href.indexOf("?") + 1)
+          .split("&");
+        for (var i = 0; i < hashes.length; i++) {
+          hash = hashes[i].split("=");
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+        }
+        return vars;
+      }
+    </script>
 
-			body {
-				color: #fff;
-				display: table-cell;
-				margin: 0;
-				padding: 0;
-				vertical-align: middle;
-			}
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        ((i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date()));
+        ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "https://www.google-analytics.com/analytics.js",
+        "ga",
+      );
 
-			.ce-countdown {
-				margin: 0 auto;
-				text-align: center;
-			}
-		</style>
+      ga("create", "UA-10230582-4", "auto");
+      ga("send", "pageview");
+    </script>
 
-		<script>
-			function getUrlVars()
-			{
-				var vars = [], hash;
-				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-				for(var i = 0; i < hashes.length; i++)
-				{
-					hash = hashes[i].split('=');
-					vars.push(hash[0]);
-					vars[hash[0]] = hash[1];
-				}
-				return vars;
-			}
-    	</script>
+    <!-- Facebook Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        "script",
+        "https://connect.facebook.net/en_US/fbevents.js",
+      );
+      fbq("init", "810494485773404"); // Insert your pixel ID here.
+      fbq("track", "PageView");
+    </script>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=810494485773404&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- DO NOT MODIFY -->
+    <!-- End Facebook Pixel Code -->
+  </head>
+  <body>
+    <main>
+      <img id="tp-countdown-icon" src="" />
+      <div>
+        <div id="tp-countdown-event-title"></div>
+        <div id="tp-countdown-in" class="tp-countdown-classify">IN</div>
+      </div>
+      <div class="ce-countdown timepage-theme" id="countdown">
+        <span id="tp-countdown-top-line">
+          <span id="daysWrapper"
+            ><span class="ce-days"></span> <span class="ce-days-label"></span
+          ></span>
+        </span>
+        <span id="tp-countdown-bottom-line">
+          <span id="hoursWrapper"
+            ><span class="ce-hours"></span> <span class="ce-hours-label"></span
+          ></span>
+          <span id="minutesWrapper"
+            ><span class="ce-minutes"></span>
+            <span class="ce-minutes-label"></span
+          ></span>
+          <span id="secondsWrapper"
+            ><span class="ce-seconds"></span>
+            <span class="ce-seconds-label"></span
+          ></span>
+        </span>
+      </div>
+      <div class="tp-countdown-date-container">
+        <div id="tp-countdown-date" class="tp-countdown-date"></div>
+      </div>
+      <div id="ago-wrapper">
+        <div id="tp-countdown-ago" class="tp-countdown-classify">AGO</div>
+      </div>
+    </main>
 
-		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <footer>
+      <a
+        href="https://apps.apple.com/app/apple-store/id989178902?pt=542023&ct=mdshome&mt=8&ct=countdown"
+      >
+        <img id="tp-app-icon" src="images/timepage.png" />
+      </a>
+      <span id="tp-download-text"
+        >Download Timepage to create a countdown on your iPhone or iPad.</span
+      >
+      <a
+        href="https://apps.apple.com/app/apple-store/id989178902?pt=542023&ct=mdshome&mt=8&ct=countdown"
+      >
+        <img id="app-store-button" src="images/appstore.png" />
+      </a>
+    </footer>
 
-			ga('create', 'UA-10230582-4', 'auto');
-			ga('send', 'pageview');
-		</script>
+    <!-- Load all necessary JavaScript files -->
+    <script src="js/vendor/jquery-1.11.2.min.js"></script>
+    <script src="js/vendor/jquery.counteverest.js"></script>
 
-		<!-- Facebook Pixel Code -->
-		<script>
-			!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-			n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-			n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-			t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-			document,'script','https://connect.facebook.net/en_US/fbevents.js');
-			fbq('init', '810494485773404'); // Insert your pixel ID here.
-			fbq('track', 'PageView');
-		</script>
-		<noscript><img height="1" width="1" style="display:none"
-		src="https://www.facebook.com/tr?id=810494485773404&ev=PageView&noscript=1"
-		/></noscript>
-		<!-- DO NOT MODIFY -->
-		<!-- End Facebook Pixel Code -->
+    <!-- Init Countdown -->
+    <script>
+      var queryParams = getUrlVars();
 
-	</head>
-	<body>
-		<div id="full">
-			<div id="main">
-				<img id="tp-countdown-icon" src="">
-				<div>
-					<div id="tp-countdown-event-title"></div>
-					<div id="tp-countdown-in" class="tp-countdown-classify">IN</div>
-				</div>
-				<div class="ce-countdown timepage-theme" id="countdown">
-					<span id="tp-countdown-top-line">
-						<span id="daysWrapper"><span class="ce-days"></span> <span class="ce-days-label"></span></span>
-					</span>
-					<span id="tp-countdown-bottom-line">
-						<span id="hoursWrapper"><span class="ce-hours"></span> <span class="ce-hours-label"></span></span>
-						<span id="minutesWrapper"><span class="ce-minutes"></span> <span class="ce-minutes-label"></span></span>
-						<span id="secondsWrapper"><span class="ce-seconds"></span> <span class="ce-seconds-label"></span></span>
-					</span>
-				</div>
-				<div id="ago-wrapper">
-					<div id="tp-countdown-ago" class="tp-countdown-classify">AGO</div>
-				</div>
-			</div>
-			<div id="footer">
-                <a href="https://itunes.apple.com/us/app/timepage-calendar-by-moleskine/id989178902?mt=8&at=1010ldAj&ct=countdown">
-				<img id="tp-app-icon" src="images/timepage.png">
-                </a>
-				<span id="tp-download-text">Download Timepage to create a countdown on your iPhone or iPad.</span>
-				<a href="https://itunes.apple.com/us/app/timepage-calendar-by-moleskine/id989178902?mt=8&at=1010ldAj&ct=countdown">
-					<img id="app-store-button" src="images/appstore.png">
-				</a>
-			</div>
-		</div>
+      var timezoneOffset = queryParams["timezoneOffset"] || 0; // UTC if nothing specified.
+      var locale = queryParams["lc"] || "en";
 
-		<!-- Load all necessary JavaScript files -->
-		<script src="js/vendor/jquery-1.11.2.min.js"></script>
-		<script src="js/vendor/jquery.counteverest.js"></script>
+      var Localization = {
+        translate: function (lcKey, value) {
+          var loc = this.locales[this.currentLocale] || this.locales.en;
+          var translation = loc[lcKey];
 
-		<!-- Init Countdown -->
-		<script>
-			var queryParams = getUrlVars();
+          // Safety: if a key is missing in a locale, fall back to English for that key.
+          if (!translation) translation = this.locales.en[lcKey];
 
-			var timezoneOffset = queryParams["timezoneOffset"] || 0; // UTC if nothing specified.
-			var locale = queryParams["lc"] || "en";
+          return translation[loc.plural(value)];
+        },
 
-			var Localization = {
-				translate: function (lcKey, value) {
-					var loc = this.locales[this.currentLocale] || this.locales.en;
-					var translation = loc[lcKey];
+        currentLocale: locale,
 
-					// Safety: if a key is missing in a locale, fall back to English for that key.
-					if (!translation) translation = this.locales.en[lcKey];
+        locales: {
+          en: {
+            D: [" DAY", " DAYS"],
+            H: [" HOUR", " HOURS"],
+            M: [" MINUTE", " MINUTES"],
+            S: [" SECOND", " SECONDS"],
+            IN: ["IN"],
+            AGO: ["AGO"],
+            DOWNLOAD: [
+              "Download Timepage to create a countdown on iPhone, iPad or Mac.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-					return translation[loc.plural(value)];
-				},
+          fr: {
+            D: [" JOUR", " JOURS"],
+            H: [" HEURE", " HEURES"],
+            M: [" MINUTE", " MINUTES"],
+            S: [" SECONDE", " SECONDES"],
+            IN: ["DANS"],
+            AGO: ["DEPUIS"],
+            DOWNLOAD: [
+              "Téléchargez Timepage pour créer un compte à rebours sur iPhone, iPad ou Mac.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-				currentLocale: locale,
+          it: {
+            D: [" GIORNO", " GIORNI"],
+            H: [" ORA", " ORE"],
+            M: [" MINUTO", " MINUTI"],
+            S: [" SECONDO", " SECONDI"],
+            IN: ["TRA"],
+            AGO: ["FA"],
+            DOWNLOAD: [
+              "Scarica Timepage per creare un conto alla rovescia su iPhone, iPad o Mac.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-				locales: {
-					en: {
-						D: [" DAY", " DAYS"],
-						H: [" HOUR", " HOURS"],
-						M: [" MINUTE", " MINUTES"],
-						S: [" SECOND", " SECONDS"],
-						IN: ["IN"],
-						AGO: ["AGO"],
-						DOWNLOAD: ["Download Timepage to create a countdown on iPhone, iPad or Mac."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+          de: {
+            D: [" TAG", " TAGE"],
+            H: [" STUNDE", " STUNDEN"],
+            M: [" MINUTE", " MINUTEN"],
+            S: [" SEKUNDE", " SEKUNDEN"],
+            IN: ["IN"],
+            AGO: ["VOR"],
+            DOWNLOAD: [
+              "Laden Sie Timepage herunter, um einen Countdown auf iPhone, iPad oder Mac zu erstellen.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-					fr: {
-						D: [" JOUR", " JOURS"],
-						H: [" HEURE", " HEURES"],
-						M: [" MINUTE", " MINUTES"],
-						S: [" SECONDE", " SECONDES"],
-						IN: ["DANS"],
-						AGO: ["DEPUIS"],
-						DOWNLOAD: ["Téléchargez Timepage pour créer un compte à rebours sur iPhone, iPad ou Mac."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+          ja: {
+            D: ["日"],
+            H: ["時間"],
+            M: ["分"],
+            S: ["秒"],
+            IN: ["あと"],
+            AGO: ["前"],
+            DOWNLOAD: [
+              "Timepageをダウンロードして、iPhone、iPad、またはMacでカウントダウンを作成します。",
+            ],
+            plural: function (nr) {
+              return 0;
+            },
+          },
 
-					it: {
-						D: [" GIORNO", " GIORNI"],
-						H: [" ORA", " ORE"],
-						M: [" MINUTO", " MINUTI"],
-						S: [" SECONDO", " SECONDI"],
-						IN: ["TRA"],
-						AGO: ["FA"],
-						DOWNLOAD: ["Scarica Timepage per creare un conto alla rovescia su iPhone, iPad o Mac."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+          zhHans: {
+            D: ["天"],
+            H: ["小时"],
+            M: ["分钟"],
+            S: ["秒钟"],
+            IN: ["于"],
+            AGO: ["前"],
+            DOWNLOAD: ["下载 Timepage，在 iPhone、iPad 或 Mac 上创建倒计时。"],
+            plural: function (nr) {
+              return 0;
+            },
+          },
 
-					de: {
-						D: [" TAG", " TAGE"],
-						H: [" STUNDE", " STUNDEN"],
-						M: [" MINUTE", " MINUTEN"],
-						S: [" SEKUNDE", " SEKUNDEN"],
-						IN: ["IN"],
-						AGO: ["VOR"],
-						DOWNLOAD: ["Laden Sie Timepage herunter, um einen Countdown auf iPhone, iPad oder Mac zu erstellen."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+          zhHant: {
+            D: ["天"],
+            H: ["小時"],
+            M: ["分鐘"],
+            S: ["秒"],
+            IN: ["還有"],
+            AGO: ["前"],
+            DOWNLOAD: [
+              "下載 Timepage，在 iPhone、iPad 或 Mac 上建立倒數計時。",
+            ],
+            plural: function (nr) {
+              return 0;
+            },
+          },
 
-					ja: {
-						D: ["日"],
-						H: ["時間"],
-						M: ["分"],
-						S: ["秒"],
-						IN: ["あと"],
-						AGO: ["前"],
-						DOWNLOAD: ["Timepageをダウンロードして、iPhone、iPad、またはMacでカウントダウンを作成します。"],
-						plural: function (nr) {
-							return 0;
-						}
-					},
+          tr: {
+            D: [" GÜN", " GÜN"],
+            H: [" SAAT", " SAAT"],
+            M: [" DAKİKA", " DAKİKA"],
+            S: [" SANİYE", " SANİYE"],
+            IN: ["İÇİNDE"],
+            AGO: ["ÖNCE"],
+            DOWNLOAD: [
+              "iPhone, iPad veya Mac’te geri sayım oluşturmak için Timepage’i indirin.",
+            ],
+            plural: function (nr) {
+              // Turkish does not inflect for plural in this usage.
+              return 0;
+            },
+          },
 
-					zhHans: {
-						D: ["天"],
-						H: ["小时"],
-						M: ["分钟"],
-						S: ["秒钟"],
-						IN: ["于"],
-						AGO: ["前"],
-						DOWNLOAD: ["下载 Timepage，在 iPhone、iPad 或 Mac 上创建倒计时。"],
-						plural: function (nr) {
-							return 0;
-						}
-					},
+          es: {
+            D: [" DÍA", " DÍAS"],
+            H: [" HORA", " HORAS"],
+            M: [" MINUTO", " MINUTOS"],
+            S: [" SEGUNDO", " SEGUNDOS"],
+            IN: ["EN"],
+            AGO: ["HACE"],
+            DOWNLOAD: [
+              "Descarga Timepage para crear una cuenta atrás en iPhone, iPad o Mac.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-					zhHant: {
-						D: ["天"],
-						H: ["小時"],
-						M: ["分鐘"],
-						S: ["秒"],
-						IN: ["還有"],
-						AGO: ["前"],
-						DOWNLOAD: ["下載 Timepage，在 iPhone、iPad 或 Mac 上建立倒數計時。"],
-						plural: function (nr) {
-							return 0;
-						}
-					},
+          ptBR: {
+            D: [" DIA", " DIAS"],
+            H: [" HORA", " HORAS"],
+            M: [" MINUTO", " MINUTOS"],
+            S: [" SEGUNDO", " SEGUNDOS"],
+            IN: ["EM"],
+            AGO: ["ATRÁS"],
+            DOWNLOAD: [
+              "Baixe o Timepage para criar uma contagem regressiva no iPhone, iPad ou Mac.",
+            ],
+            plural: function (nr) {
+              return nr == 1 ? 0 : 1;
+            },
+          },
 
-					tr: {
-						D: [" GÜN", " GÜN"],
-						H: [" SAAT", " SAAT"],
-						M: [" DAKİKA", " DAKİKA"],
-						S: [" SANİYE", " SANİYE"],
-						IN: ["İÇİNDE"],
-						AGO: ["ÖNCE"],
-						DOWNLOAD: ["iPhone, iPad veya Mac’te geri sayım oluşturmak için Timepage’i indirin."],
-						plural: function (nr) {
-							// Turkish does not inflect for plural in this usage.
-							return 0;
-						}
-					},
+          ko: {
+            D: ["일"],
+            H: ["시간"],
+            M: ["분"],
+            S: ["초"],
+            IN: ["후"],
+            AGO: ["전"],
+            DOWNLOAD: [
+              "Timepage를 다운로드하여 iPhone, iPad 또는 Mac에서 카운트다운을 만드세요.",
+            ],
+            plural: function (nr) {
+              return 0;
+            },
+          },
 
-					es: {
-						D: [" DÍA", " DÍAS"],
-						H: [" HORA", " HORAS"],
-						M: [" MINUTO", " MINUTOS"],
-						S: [" SEGUNDO", " SEGUNDOS"],
-						IN: ["EN"],
-						AGO: ["HACE"],
-						DOWNLOAD: ["Descarga Timepage para crear una cuenta atrás en iPhone, iPad o Mac."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+          ru: {
+            // Russian has 3 plural forms for these units.
+            // Keep the rest of your structure the same by using 3 strings per unit.
+            D: [" ДЕНЬ", " ДНЯ", " ДНЕЙ"],
+            H: [" ЧАС", " ЧАСА", " ЧАСОВ"],
+            M: [" МИНУТА", " МИНУТЫ", " МИНУТ"],
+            S: [" СЕКУНДА", " СЕКУНДЫ", " СЕКУНД"],
+            IN: ["ЧЕРЕЗ"],
+            AGO: ["НАЗАД"],
+            DOWNLOAD: [
+              "Скачайте Timepage, чтобы создать обратный отсчёт на iPhone, iPad или Mac.",
+            ],
+            plural: function (nr) {
+              // 0: singular (1, 21, 31...) excluding 11
+              // 1: paucal (2-4, 22-24...) excluding 12-14
+              // 2: plural (0, 5-20, 25-30, 11-14...)
+              nr = Math.abs(nr) % 100;
+              var n1 = nr % 10;
+              if (nr > 10 && nr < 20) return 2;
+              if (n1 > 1 && n1 < 5) return 1;
+              if (n1 == 1) return 0;
+              return 2;
+            },
+          },
+        },
+      };
 
-					ptBR: {
-						D: [" DIA", " DIAS"],
-						H: [" HORA", " HORAS"],
-						M: [" MINUTO", " MINUTOS"],
-						S: [" SEGUNDO", " SEGUNDOS"],
-						IN: ["EM"],
-						AGO: ["ATRÁS"],
-						DOWNLOAD: ["Baixe o Timepage para criar uma contagem regressiva no iPhone, iPad ou Mac."],
-						plural: function (nr) {
-							return nr == 1 ? 0 : 1;
-						}
-					},
+      var daysWrapper = $("#daysWrapper");
+      var hoursWrapper = $("#hoursWrapper");
+      var minutesWrapper = $("#minutesWrapper");
+      var secondsWrapper = $("#secondsWrapper");
+      var agoLabel = $("#tp-countdown-ago");
+      var inLabel = $("#tp-countdown-in");
 
-					ko: {
-						D: ["일"],
-						H: ["시간"],
-						M: ["분"],
-						S: ["초"],
-						IN: ["후"],
-						AGO: ["전"],
-						DOWNLOAD: ["Timepage를 다운로드하여 iPhone, iPad 또는 Mac에서 카운트다운을 만드세요."],
-						plural: function (nr) {
-							return 0;
-						}
-					},
+      $(document).ready(function () {
+        $(".ce-countdown").countEverest({
+          // Set your target date here!
+          day: queryParams["day"],
+          month: queryParams["month"],
+          year: queryParams["year"],
+          hour: queryParams["hour"],
+          minute: queryParams["minute"],
+          second: queryParams["second"],
+          singularLabels: true,
+          daysLabel: Localization.translate("D", 2),
+          dayLabel: Localization.translate("D", 1),
+          hoursLabel: Localization.translate("H", 2),
+          hourLabel: Localization.translate("H", 1),
+          minutesLabel: Localization.translate("M", 2),
+          minuteLabel: Localization.translate("M", 1),
+          secondsLabel: Localization.translate("S", 2),
+          secondLabel: Localization.translate("S", 1),
+          timeZone: timezoneOffset,
+          countUp: true,
+          onChange: function () {
+            console.log(
+              "Days: " +
+                this.days +
+                " Hours: " +
+                this.hours +
+                " Minutes: " +
+                this.minutes +
+                " Seconds: " +
+                this.seconds,
+            );
+            if (Math.abs(this.days) > 0) {
+              //console.log("Days" + this.days);
+              $("#daysWrapper").appendTo("#tp-countdown-top-line");
+              hoursWrapper.appendTo("#tp-countdown-bottom-line");
+              hoursWrapper.append(" ");
+              minutesWrapper.appendTo("#tp-countdown-bottom-line");
+              minutesWrapper.append(" ");
+              secondsWrapper.appendTo("#tp-countdown-bottom-line");
+            } else {
+              daysWrapper.detach();
 
-					ru: {
-						// Russian has 3 plural forms for these units.
-						// Keep the rest of your structure the same by using 3 strings per unit.
-						D: [" ДЕНЬ", " ДНЯ", " ДНЕЙ"],
-						H: [" ЧАС", " ЧАСА", " ЧАСОВ"],
-						M: [" МИНУТА", " МИНУТЫ", " МИНУТ"],
-						S: [" СЕКУНДА", " СЕКУНДЫ", " СЕКУНД"],
-						IN: ["ЧЕРЕЗ"],
-						AGO: ["НАЗАД"],
-						DOWNLOAD: ["Скачайте Timepage, чтобы создать обратный отсчёт на iPhone, iPad или Mac."],
-						plural: function (nr) {
-							// 0: singular (1, 21, 31...) excluding 11
-							// 1: paucal (2-4, 22-24...) excluding 12-14
-							// 2: plural (0, 5-20, 25-30, 11-14...)
-							nr = Math.abs(nr) % 100;
-							var n1 = nr % 10;
-							if (nr > 10 && nr < 20) return 2;
-							if (n1 > 1 && n1 < 5) return 1;
-							if (n1 == 1) return 0;
-							return 2;
-						}
-					}
-				}
-			};
+              if (Math.abs(this.hours) > 0) {
+                //console.log("Hours" + this.hours);
+                hoursWrapper.appendTo("#tp-countdown-top-line");
+                minutesWrapper.appendTo("#tp-countdown-bottom-line");
+                minutesWrapper.append(" ");
+                secondsWrapper.appendTo("#tp-countdown-bottom-line");
+              } else {
+                hoursWrapper.detach();
 
+                if (Math.abs(this.minutes) > 0) {
+                  //console.log("Minutes" + this.minutes);
+                  minutesWrapper.appendTo("#tp-countdown-top-line");
+                  secondsWrapper.appendTo("#tp-countdown-bottom-line");
+                } else {
+                  //console.log("Seconds" + this.seconds);
+                  minutesWrapper.detach();
+                  secondsWrapper.appendTo("#tp-countdown-top-line");
+                }
+              }
+            }
 
-			var daysWrapper = $('#daysWrapper');
-			var hoursWrapper = $('#hoursWrapper');
-			var minutesWrapper = $('#minutesWrapper');
-			var secondsWrapper = $('#secondsWrapper');
-			var agoLabel = $('#tp-countdown-ago');
-			var inLabel = $('#tp-countdown-in');
+            var target = new Date(
+              Date.UTC(
+                this.settings.year,
+                this.settings.month - 1,
+                this.settings.day,
+                this.settings.hour,
+                this.settings.minute,
+                this.settings.second,
+              ),
+            );
 
-			$(document).ready(function() {
-				$('.ce-countdown').countEverest({
-					// Set your target date here!
-					day: queryParams["day"],
-					month: queryParams["month"],
-					year: queryParams["year"],
-					hour: queryParams["hour"],
-					minute: queryParams["minute"],
-					second: queryParams["second"],
-					daysLabel: Localization.translate("D",2),
-					dayLabel: Localization.translate("D",1),
-					hoursLabel: Localization.translate("H",2),
-					hourLabel: Localization.translate("H",1),
-					minutesLabel: Localization.translate("M",2),
-					minuteLabel: Localization.translate("M",1),
-					secondsLabel: Localization.translate("S",2),
-					secondLabel: Localization.translate("S",1),
-					timeZone: timezoneOffset,
-					countUp: true,
-					onChange: function() {
-						console.log("Days: " + this.days + " Hours: " + this.hours + " Minutes: " + this.minutes + " Seconds: " + this.seconds);
-						if (Math.abs(this.days) > 0) {
-							//console.log("Days" + this.days);
-							$('#daysWrapper').appendTo('#tp-countdown-top-line');
-							hoursWrapper.appendTo('#tp-countdown-bottom-line');
-							hoursWrapper.append(" ");
-							minutesWrapper.appendTo('#tp-countdown-bottom-line');
-							minutesWrapper.append(" ");
-							secondsWrapper.appendTo('#tp-countdown-bottom-line');
-						} else {
-							daysWrapper.detach();
+            // Format and display the target date
+            var dateOptions = {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            };
+            var formattedDate = target.toLocaleDateString(locale, dateOptions);
+            document.getElementById("tp-countdown-date").innerHTML =
+              formattedDate;
 
-							if (Math.abs(this.hours) > 0) {
-								//console.log("Hours" + this.hours);
-								hoursWrapper.appendTo('#tp-countdown-top-line');
-								minutesWrapper.appendTo('#tp-countdown-bottom-line');
-								minutesWrapper.append(" ");
-								secondsWrapper.appendTo('#tp-countdown-bottom-line');
-							} else {
-								hoursWrapper.detach();
+            if (target > this.currentDate) {
+              agoLabel.detach();
+            } else {
+              agoLabel.appendTo("#ago-wrapper");
+              inLabel.detach();
+            }
+          },
+          onComplete: function () {
+            //						location.reload();
+          },
+        });
+      });
 
-								if (Math.abs(this.minutes) > 0) {
-									//console.log("Minutes" + this.minutes);
-									minutesWrapper.appendTo('#tp-countdown-top-line');
-									secondsWrapper.appendTo('#tp-countdown-bottom-line');
-								} else {
-									//console.log("Seconds" + this.seconds);
-									minutesWrapper.detach();
-									secondsWrapper.appendTo('#tp-countdown-top-line');
-								}
-							}
-						}
+      var backgroundColor = queryParams["color"];
+      if (!backgroundColor) backgroundColor = "#1d2424";
+      document.body.style.background = backgroundColor;
 
-						var target = new Date(Date.UTC(this.settings.year, this.settings.month - 1, this.settings.day, this.settings.hour, this.settings.minute, this.settings.second));
-						if (target > this.currentDate) {
-							agoLabel.detach();
-						} else {
-							agoLabel.appendTo('#ago-wrapper');
-							inLabel.detach();
-						}
-					},
-					onComplete: function() {
-//						location.reload();
-					}
-				});
-			});
+      var icon = queryParams["icon"];
+      if (icon) {
+        var iconName = "./images/" + decodeURIComponent(icon) + ".png";
+        $("#tp-countdown-icon").attr("src", iconName);
+      } else {
+        $("#tp-countdown-icon").detach();
+      }
 
-			var backgroundColor = queryParams["color"];
-			if (!backgroundColor) backgroundColor = "#1d2424";
-			document.body.style.background = backgroundColor;
+      document.getElementById("tp-countdown-ago").innerHTML =
+        Localization.translate("AGO", 1);
 
-			var icon = queryParams["icon"];
-			if (icon) {
-				var iconName = "./images/" + decodeURIComponent(icon) + ".png";
-  				$('#tp-countdown-icon').attr('src', iconName);
-			} else {
-				$('#tp-countdown-icon').detach();
-			}
+      var title = queryParams["title"];
+      if (title) {
+        document.getElementById("tp-countdown-in").innerHTML =
+          Localization.translate("IN", 1);
+        document.getElementById("tp-download-text").innerHTML =
+          Localization.translate("DOWNLOAD", 1);
 
-			document.getElementById('tp-countdown-ago').innerHTML = Localization.translate("AGO",1);
-
-			var title = queryParams["title"];
-			if (title) {
-				document.getElementById('tp-countdown-in').innerHTML = Localization.translate("IN",1);
-				document.getElementById('tp-download-text').innerHTML = Localization.translate("DOWNLOAD",1);
-
-				var decodedTitle = decodeURIComponent(title);
-				document.getElementById('tp-countdown-event-title').innerHTML = decodedTitle;
-				document.title = decodedTitle + " via Timepage";
-			} else {
-				document.getElementById('tp-countdown-in').innerHTML = "";
-				document.title = "Timepage Countdown";
-			}
-		</script>
-	</body>
+        var decodedTitle = decodeURIComponent(title);
+        document.getElementById("tp-countdown-event-title").innerHTML =
+          decodedTitle;
+        document.title = decodedTitle + " via Timepage";
+      } else {
+        document.getElementById("tp-countdown-in").innerHTML = "";
+        document.title = "Timepage Countdown";
+      }
+    </script>
+  </body>
 </html>
