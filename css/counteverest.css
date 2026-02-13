@@ -144,15 +144,6 @@ main,
   color: var(--theme-fg-muted);
 }
 
-#tp-app-icon {
-  display: block;
-  width: 20vmin;
-  min-width: 90px;
-  max-width: 180px;
-  margin: auto;
-  border-radius: 18%;
-}
-
 #app-store-button {
   display: block;
   width: 20vmin;
