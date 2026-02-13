@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "WNS6PSQDQ9.com.bonobolabs.CountdownApp",
+        "paths": [
+          "/*"
+        ]
+      }
+    ]
+  }
+}
