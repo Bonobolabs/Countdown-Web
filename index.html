@@ -1,8 +1,7 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:title" content="Countdown" />
     <meta property="og:image" content="/apple-touch-icon.png" />
@@ -19,8 +18,7 @@
 
     <title>Countdown</title>
 
-    <!-- Load stylesheet -->
-    <link rel="stylesheet" href="css/counteverest.css" />
+    <link rel="stylesheet" href="css/styles.css" />
 
     <!-- Load Google Fonts -->
     <link
@@ -77,481 +75,472 @@
       </a>
     </footer>
 
-    <!-- Load all necessary JavaScript files -->
     <script src="js/vendor/jquery-1.11.2.min.js"></script>
     <script src="js/vendor/jquery.counteverest.js"></script>
 
-    <!-- Init Countdown -->
     <script>
-      var queryParams = new URLSearchParams(window.location.search);
+      (() => {
+        const queryParams = new URLSearchParams(window.location.search);
 
-      function parseBoolean(value) {
-        if (!value) return false;
-        var normalized = value.trim().toLowerCase();
-        return normalized === "1" || normalized === "true" || normalized === "yes";
-      }
-
-      function parseISO8601(value) {
-        if (!value) return null;
-        var parsed = new Date(value);
-        return Number.isNaN(parsed.getTime()) ? null : parsed;
-      }
-
-      function normalizeHexColor(value) {
-        if (!value) return null;
-
-        var normalized = value.trim();
-        if (normalized[0] === "#") {
-          normalized = normalized.slice(1);
-        }
-
-        if (/^[0-9a-fA-F]{3}$/.test(normalized)) {
-          normalized = normalized
-            .split("")
-            .map(function (char) {
-              return char + char;
-            })
-            .join("");
-        }
-
-        if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
-          return null;
-        }
-
-        return "#" + normalized.toUpperCase();
-      }
-
-      function browserLocaleForKey(localeKey) {
-        if (localeKey === "zhHans") return "zh-Hans";
-        if (localeKey === "zhHant") return "zh-Hant";
-        if (localeKey === "ptBR") return "pt-BR";
-        return localeKey || "en";
-      }
-
-      function resolveTimeZone(timeZoneValue) {
-        if (!timeZoneValue) return "UTC";
-        try {
-          Intl.DateTimeFormat("en-US", { timeZone: timeZoneValue }).format(new Date());
-          return timeZoneValue;
-        } catch (error) {
-          return "UTC";
-        }
-      }
-
-      function partsInTimeZone(date, timeZone) {
-        var formatter = new Intl.DateTimeFormat("en-CA", {
-          timeZone: timeZone,
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false,
-        });
-
-        var parts = formatter.formatToParts(date);
-        var valueByType = {};
-        for (var i = 0; i < parts.length; i++) {
-          valueByType[parts[i].type] = parts[i].value;
-        }
-
-        return {
-          year: Number(valueByType.year),
-          month: Number(valueByType.month),
-          day: Number(valueByType.day),
-          hour: Number(valueByType.hour),
-          minute: Number(valueByType.minute),
-          second: Number(valueByType.second),
-        };
-      }
-
-      function offsetHoursForTimeZone(date, timeZone) {
-        var parts = partsInTimeZone(date, timeZone);
-        var asUTC = Date.UTC(
-          parts.year,
-          parts.month - 1,
-          parts.day,
-          parts.hour,
-          parts.minute,
-          parts.second,
-        );
-        return (asUTC - date.getTime()) / 3600000;
-      }
-
-      function textColorForBackground(hexColor) {
-        var normalized = normalizeHexColor(hexColor) || "#1D2424";
-        var r = parseInt(normalized.slice(1, 3), 16);
-        var g = parseInt(normalized.slice(3, 5), 16);
-        var b = parseInt(normalized.slice(5, 7), 16);
-        var yiq = (r * 299 + g * 587 + b * 114) / 1000;
-        return yiq >= 160 ? "#000000" : "#FFFFFF";
-      }
-
-      function rgbaFromHex(hexColor, alpha) {
-        var normalized = normalizeHexColor(hexColor) || "#000000";
-        var r = parseInt(normalized.slice(1, 3), 16);
-        var g = parseInt(normalized.slice(3, 5), 16);
-        var b = parseInt(normalized.slice(5, 7), 16);
-        return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
-      }
-
-      function loadThemeConfig() {
-        return fetch("./themes.json", { cache: "no-store" })
-          .then(function (response) {
-            return response.ok ? response.json() : null;
-          })
-          .catch(function () {
-            return null;
-          });
-      }
-
-      function themeColorsFromConfig(themeId, themeConfig) {
-        if (!themeConfig || !themeConfig.themes || !themeId) return null;
-        var entry = themeConfig.themes[themeId.trim().toLowerCase()];
-        if (!entry) return null;
-
-        var background = normalizeHexColor(entry.background);
-        if (!background) return null;
-
-        return {
-          background: background,
-          foreground: normalizeHexColor(entry.foreground),
-          highlight: normalizeHexColor(entry.highlight),
-        };
-      }
-
-      function resolveThemeColors(
-        queryColor,
-        queryForegroundColor,
-        queryHighlightColor,
-        themeId,
-        themeConfig,
-      ) {
-        var configuredColors = themeColorsFromConfig(themeId, themeConfig);
-        return {
-          background:
-            normalizeHexColor(queryColor) ||
-            (configuredColors && configuredColors.background) ||
-            "#1D2424",
-          foreground:
-            normalizeHexColor(queryForegroundColor) ||
-            (configuredColors && configuredColors.foreground) ||
-            null,
-          highlight:
-            normalizeHexColor(queryHighlightColor) ||
-            (configuredColors && configuredColors.highlight) ||
-            null,
-        };
-      }
-
-      function applyTheme(backgroundColor, preferredForegroundColor, preferredHighlightColor) {
-        var foregroundColor =
-          normalizeHexColor(preferredForegroundColor) || textColorForBackground(backgroundColor);
-        var highlightColor =
-          normalizeHexColor(preferredHighlightColor) || foregroundColor;
-        var secondaryText =
-          foregroundColor === "#000000"
-            ? rgbaFromHex(foregroundColor, 0.72)
-            : rgbaFromHex(foregroundColor, 0.84);
-        var pillBackground =
-          foregroundColor === "#000000"
-            ? "rgba(255, 255, 255, 0.45)"
-            : "rgba(0, 0, 0, 0.35)";
-
-        document.documentElement.style.setProperty("--theme-bg", backgroundColor);
-        document.documentElement.style.setProperty("--theme-fg", foregroundColor);
-        document.documentElement.style.setProperty("--theme-highlight", highlightColor);
-        document.documentElement.style.setProperty("--theme-fg-muted", secondaryText);
-        document.documentElement.style.setProperty("--theme-chip-bg", pillBackground);
-
-        var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-          metaThemeColor.setAttribute("content", backgroundColor);
-        }
-      }
-
-      function updateTargetDateLabel(date, localeKey, timeZone, isAllDay) {
-        var options = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          timeZone: timeZone,
+        const parseBoolean = (value) => {
+          if (!value) return false;
+          const normalized = value.trim().toLowerCase();
+          return normalized === "1" || normalized === "true" || normalized === "yes";
         };
 
-        if (!isAllDay) {
-          options.hour = "numeric";
-          options.minute = "2-digit";
-          options.hour12 = true;
-        }
+        const parseISO8601 = (value) => {
+          if (!value) return null;
+          const parsed = new Date(value);
+          return Number.isNaN(parsed.getTime()) ? null : parsed;
+        };
 
-        var formattedDate = date.toLocaleString(browserLocaleForKey(localeKey), options);
-        document.getElementById("tp-countdown-date").textContent = formattedDate;
-      }
+        const normalizeHexColor = (value) => {
+          if (!value) return null;
 
-      var locale = queryParams.get("lc") || "en";
-      var timeZone = resolveTimeZone(queryParams.get("tz"));
-      var isAllDay = parseBoolean(queryParams.get("allDay"));
-      var targetDate = parseISO8601(queryParams.get("target"));
-      if (!targetDate) {
-        targetDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      }
-
-      var targetParts = partsInTimeZone(targetDate, timeZone);
-      var timezoneOffset = offsetHoursForTimeZone(targetDate, timeZone);
-
-      var Localization = {
-        translate: function (lcKey, value) {
-          var loc = this.locales[this.currentLocale] || this.locales.en;
-          var translation = loc[lcKey];
-
-          if (!translation) translation = this.locales.en[lcKey];
-
-          return translation[loc.plural(value)];
-        },
-
-        currentLocale: locale,
-
-        locales: {
-          en: {
-            D: [" DAY", " DAYS"],
-            H: [" HOUR", " HOURS"],
-            M: [" MINUTE", " MINUTES"],
-            S: [" SECOND", " SECONDS"],
-            IN: ["IN"],
-            AGO: ["AGO"],
-            DOWNLOAD: [
-              "Download Countdown to create a countdown on iPhone, iPad or Mac.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          fr: {
-            D: [" JOUR", " JOURS"],
-            H: [" HEURE", " HEURES"],
-            M: [" MINUTE", " MINUTES"],
-            S: [" SECONDE", " SECONDES"],
-            IN: ["DANS"],
-            AGO: ["DEPUIS"],
-            DOWNLOAD: [
-              "Téléchargez Countdown pour créer un compte à rebours sur iPhone, iPad ou Mac.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          it: {
-            D: [" GIORNO", " GIORNI"],
-            H: [" ORA", " ORE"],
-            M: [" MINUTO", " MINUTI"],
-            S: [" SECONDO", " SECONDI"],
-            IN: ["TRA"],
-            AGO: ["FA"],
-            DOWNLOAD: [
-              "Scarica Countdown per creare un conto alla rovescia su iPhone, iPad o Mac.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          de: {
-            D: [" TAG", " TAGE"],
-            H: [" STUNDE", " STUNDEN"],
-            M: [" MINUTE", " MINUTEN"],
-            S: [" SEKUNDE", " SEKUNDEN"],
-            IN: ["IN"],
-            AGO: ["VOR"],
-            DOWNLOAD: [
-              "Laden Sie Countdown herunter, um einen Countdown auf iPhone, iPad oder Mac zu erstellen.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          ja: {
-            D: ["日"],
-            H: ["時間"],
-            M: ["分"],
-            S: ["秒"],
-            IN: ["あと"],
-            AGO: ["前"],
-            DOWNLOAD: [
-              "Countdownをダウンロードして、iPhone、iPad、またはMacでカウントダウンを作成します。",
-            ],
-            plural: function (nr) {
-              return 0;
-            },
-          },
-
-          zhHans: {
-            D: ["天"],
-            H: ["小时"],
-            M: ["分钟"],
-            S: ["秒钟"],
-            IN: ["于"],
-            AGO: ["前"],
-            DOWNLOAD: ["下载 Countdown，在 iPhone、iPad 或 Mac 上创建倒计时。"],
-            plural: function (nr) {
-              return 0;
-            },
-          },
-
-          zhHant: {
-            D: ["天"],
-            H: ["小時"],
-            M: ["分鐘"],
-            S: ["秒"],
-            IN: ["還有"],
-            AGO: ["前"],
-            DOWNLOAD: ["下載 Countdown，在 iPhone、iPad 或 Mac 上建立倒數計時。"],
-            plural: function (nr) {
-              return 0;
-            },
-          },
-
-          tr: {
-            D: [" GÜN", " GÜN"],
-            H: [" SAAT", " SAAT"],
-            M: [" DAKİKA", " DAKİKA"],
-            S: [" SANİYE", " SANİYE"],
-            IN: ["İÇİNDE"],
-            AGO: ["ÖNCE"],
-            DOWNLOAD: [
-              "iPhone, iPad veya Mac’te geri sayım oluşturmak için Countdown’i indirin.",
-            ],
-            plural: function (nr) {
-              return 0;
-            },
-          },
-
-          es: {
-            D: [" DÍA", " DÍAS"],
-            H: [" HORA", " HORAS"],
-            M: [" MINUTO", " MINUTOS"],
-            S: [" SEGUNDO", " SEGUNDOS"],
-            IN: ["EN"],
-            AGO: ["HACE"],
-            DOWNLOAD: [
-              "Descarga Countdown para crear una cuenta atrás en iPhone, iPad o Mac.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          ptBR: {
-            D: [" DIA", " DIAS"],
-            H: [" HORA", " HORAS"],
-            M: [" MINUTO", " MINUTOS"],
-            S: [" SEGUNDO", " SEGUNDOS"],
-            IN: ["EM"],
-            AGO: ["ATRÁS"],
-            DOWNLOAD: [
-              "Baixe o Countdown para criar uma contagem regressiva no iPhone, iPad ou Mac.",
-            ],
-            plural: function (nr) {
-              return nr == 1 ? 0 : 1;
-            },
-          },
-
-          ko: {
-            D: ["일"],
-            H: ["시간"],
-            M: ["분"],
-            S: ["초"],
-            IN: ["후"],
-            AGO: ["전"],
-            DOWNLOAD: [
-              "Countdown를 다운로드하여 iPhone, iPad 또는 Mac에서 카운트다운을 만드세요.",
-            ],
-            plural: function (nr) {
-              return 0;
-            },
-          },
-
-          ru: {
-            D: [" ДЕНЬ", " ДНЯ", " ДНЕЙ"],
-            H: [" ЧАС", " ЧАСА", " ЧАСОВ"],
-            M: [" МИНУТА", " МИНУТЫ", " МИНУТ"],
-            S: [" СЕКУНДА", " СЕКУНДЫ", " СЕКУНД"],
-            IN: ["ЧЕРЕЗ"],
-            AGO: ["НАЗАД"],
-            DOWNLOAD: [
-              "Скачайте Countdown, чтобы создать обратный отсчёт на iPhone, iPad или Mac.",
-            ],
-            plural: function (nr) {
-              nr = Math.abs(nr) % 100;
-              var n1 = nr % 10;
-              if (nr > 10 && nr < 20) return 2;
-              if (n1 > 1 && n1 < 5) return 1;
-              if (n1 == 1) return 0;
-              return 2;
-            },
-          },
-        },
-      };
-
-      var daysWrapper = $("#daysWrapper");
-      var hoursWrapper = $("#hoursWrapper");
-      var minutesWrapper = $("#minutesWrapper");
-      var secondsWrapper = $("#secondsWrapper");
-      var agoLabel = $("#tp-countdown-ago");
-      var inLabel = $("#tp-countdown-in");
-
-      loadThemeConfig().then(function (themeConfig) {
-        var resolvedThemeColors = resolveThemeColors(
-          queryParams.get("color"),
-          queryParams.get("foregroundColor"),
-          queryParams.get("highlightColor"),
-          queryParams.get("theme"),
-          themeConfig,
-        );
-        applyTheme(
-          resolvedThemeColors.background,
-          resolvedThemeColors.foreground,
-          resolvedThemeColors.highlight,
-        );
-
-        var icon = queryParams.get("icon");
-        if (icon) {
-          var safeIcon = icon.replace(/[^a-zA-Z0-9_-]/g, "");
-          var iconName = "./images/" + safeIcon + ".png";
-          $("#tp-countdown-icon").attr("src", iconName);
-        } else {
-          $("#tp-countdown-icon").detach();
-        }
-
-        document.getElementById("tp-countdown-ago").textContent =
-          Localization.translate("AGO", 1);
-        document.getElementById("tp-download-text").textContent =
-          Localization.translate("DOWNLOAD", 1);
-
-        var title = queryParams.get("title");
-        if (title) {
-          document.getElementById("tp-countdown-in").textContent =
-            Localization.translate("IN", 1);
-          document.getElementById("tp-countdown-event-title").textContent = title;
-
-          var pageTitle = title + " via Countdown";
-          document.title = pageTitle;
-
-          var ogTitle = document.querySelector('meta[property="og:title"]');
-          if (ogTitle) {
-            ogTitle.setAttribute("content", pageTitle);
+          let normalized = value.trim();
+          if (normalized.startsWith("#")) {
+            normalized = normalized.slice(1);
           }
-        } else {
-          document.getElementById("tp-countdown-in").textContent = "";
-          document.title = "Countdown";
+
+          if (/^[0-9a-fA-F]{3}$/.test(normalized)) {
+            normalized = normalized
+              .split("")
+              .map((char) => char + char)
+              .join("");
+          }
+
+          if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+            return null;
+          }
+
+          return "#" + normalized.toUpperCase();
+        };
+
+        const browserLocaleForKey = (localeKey) => {
+          if (localeKey === "zhHans") return "zh-Hans";
+          if (localeKey === "zhHant") return "zh-Hant";
+          if (localeKey === "ptBR") return "pt-BR";
+          return localeKey || "en";
+        };
+
+        const resolveTimeZone = (timeZoneValue) => {
+          if (!timeZoneValue) return "UTC";
+          try {
+            Intl.DateTimeFormat("en-US", { timeZone: timeZoneValue }).format(new Date());
+            return timeZoneValue;
+          } catch (error) {
+            return "UTC";
+          }
+        };
+
+        const partsInTimeZone = (date, timeZone) => {
+          const formatter = new Intl.DateTimeFormat("en-CA", {
+            timeZone,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          });
+
+          const parts = formatter.formatToParts(date);
+          const valueByType = {};
+          parts.forEach((part) => {
+            valueByType[part.type] = part.value;
+          });
+
+          return {
+            year: Number(valueByType.year),
+            month: Number(valueByType.month),
+            day: Number(valueByType.day),
+            hour: Number(valueByType.hour),
+            minute: Number(valueByType.minute),
+            second: Number(valueByType.second),
+          };
+        };
+
+        const offsetHoursForTimeZone = (date, timeZone) => {
+          const parts = partsInTimeZone(date, timeZone);
+          const asUTC = Date.UTC(
+            parts.year,
+            parts.month - 1,
+            parts.day,
+            parts.hour,
+            parts.minute,
+            parts.second,
+          );
+          return (asUTC - date.getTime()) / 3600000;
+        };
+
+        const textColorForBackground = (hexColor) => {
+          const normalized = normalizeHexColor(hexColor) || "#1D2424";
+          const r = parseInt(normalized.slice(1, 3), 16);
+          const g = parseInt(normalized.slice(3, 5), 16);
+          const b = parseInt(normalized.slice(5, 7), 16);
+          const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+          return yiq >= 160 ? "#000000" : "#FFFFFF";
+        };
+
+        const rgbaFromHex = (hexColor, alpha) => {
+          const normalized = normalizeHexColor(hexColor) || "#000000";
+          const r = parseInt(normalized.slice(1, 3), 16);
+          const g = parseInt(normalized.slice(3, 5), 16);
+          const b = parseInt(normalized.slice(5, 7), 16);
+          return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+        };
+
+        const loadThemeConfig = async () => {
+          try {
+            const response = await fetch("./themes.json", { cache: "no-store" });
+            return response.ok ? response.json() : null;
+          } catch (error) {
+            return null;
+          }
+        };
+
+        const themeColorsFromConfig = (themeId, themeConfig) => {
+          if (!themeConfig?.themes || !themeId) return null;
+          const entry = themeConfig.themes[themeId.trim().toLowerCase()];
+          if (!entry) return null;
+
+          const background = normalizeHexColor(entry.background);
+          if (!background) return null;
+
+          return {
+            background,
+            foreground: normalizeHexColor(entry.foreground),
+            highlight: normalizeHexColor(entry.highlight),
+          };
+        };
+
+        const resolveThemeColors = (
+          queryColor,
+          queryForegroundColor,
+          queryHighlightColor,
+          themeId,
+          themeConfig,
+        ) => {
+          const configuredColors = themeColorsFromConfig(themeId, themeConfig);
+          return {
+            background:
+              normalizeHexColor(queryColor) || configuredColors?.background || "#1D2424",
+            foreground: normalizeHexColor(queryForegroundColor) || configuredColors?.foreground || null,
+            highlight: normalizeHexColor(queryHighlightColor) || configuredColors?.highlight || null,
+          };
+        };
+
+        const applyTheme = (backgroundColor, preferredForegroundColor, preferredHighlightColor) => {
+          const foregroundColor =
+            normalizeHexColor(preferredForegroundColor) || textColorForBackground(backgroundColor);
+          const highlightColor = normalizeHexColor(preferredHighlightColor) || foregroundColor;
+          const secondaryText =
+            foregroundColor === "#000000"
+              ? rgbaFromHex(foregroundColor, 0.72)
+              : rgbaFromHex(foregroundColor, 0.84);
+          const pillBackground =
+            foregroundColor === "#000000"
+              ? "rgba(255, 255, 255, 0.45)"
+              : "rgba(0, 0, 0, 0.35)";
+
+          document.documentElement.style.setProperty("--theme-bg", backgroundColor);
+          document.documentElement.style.setProperty("--theme-fg", foregroundColor);
+          document.documentElement.style.setProperty("--theme-highlight", highlightColor);
+          document.documentElement.style.setProperty("--theme-fg-muted", secondaryText);
+          document.documentElement.style.setProperty("--theme-chip-bg", pillBackground);
+
+          const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+          if (metaThemeColor) {
+            metaThemeColor.setAttribute("content", backgroundColor);
+          }
+        };
+
+        const updateTargetDateLabel = (date, localeKey, timeZone, isAllDay) => {
+          const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            timeZone,
+          };
+
+          if (!isAllDay) {
+            options.hour = "numeric";
+            options.minute = "2-digit";
+            options.hour12 = true;
+          }
+
+          const formattedDate = date.toLocaleString(browserLocaleForKey(localeKey), options);
+          document.getElementById("tp-countdown-date").textContent = formattedDate;
+        };
+
+        const locale = queryParams.get("lc") || "en";
+        const timeZone = resolveTimeZone(queryParams.get("tz"));
+        const isAllDay = parseBoolean(queryParams.get("allDay"));
+        let targetDate = parseISO8601(queryParams.get("target"));
+        if (!targetDate) {
+          targetDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
         }
 
-        updateTargetDateLabel(targetDate, locale, timeZone, isAllDay);
+        const targetParts = partsInTimeZone(targetDate, timeZone);
+        const timezoneOffset = offsetHoursForTimeZone(targetDate, timeZone);
 
-        $(document).ready(function () {
+        const localization = {
+          currentLocale: locale,
+          locales: {
+            en: {
+              D: [" DAY", " DAYS"],
+              H: [" HOUR", " HOURS"],
+              M: [" MINUTE", " MINUTES"],
+              S: [" SECOND", " SECONDS"],
+              IN: ["IN"],
+              AGO: ["AGO"],
+              DOWNLOAD: [
+                "Download Countdown to create a countdown on iPhone, iPad or Mac.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            fr: {
+              D: [" JOUR", " JOURS"],
+              H: [" HEURE", " HEURES"],
+              M: [" MINUTE", " MINUTES"],
+              S: [" SECONDE", " SECONDES"],
+              IN: ["DANS"],
+              AGO: ["DEPUIS"],
+              DOWNLOAD: [
+                "Téléchargez Countdown pour créer un compte à rebours sur iPhone, iPad ou Mac.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            it: {
+              D: [" GIORNO", " GIORNI"],
+              H: [" ORA", " ORE"],
+              M: [" MINUTO", " MINUTI"],
+              S: [" SECONDO", " SECONDI"],
+              IN: ["TRA"],
+              AGO: ["FA"],
+              DOWNLOAD: [
+                "Scarica Countdown per creare un conto alla rovescia su iPhone, iPad o Mac.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            de: {
+              D: [" TAG", " TAGE"],
+              H: [" STUNDE", " STUNDEN"],
+              M: [" MINUTE", " MINUTEN"],
+              S: [" SEKUNDE", " SEKUNDEN"],
+              IN: ["IN"],
+              AGO: ["VOR"],
+              DOWNLOAD: [
+                "Laden Sie Countdown herunter, um einen Countdown auf iPhone, iPad oder Mac zu erstellen.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            ja: {
+              D: ["日"],
+              H: ["時間"],
+              M: ["分"],
+              S: ["秒"],
+              IN: ["あと"],
+              AGO: ["前"],
+              DOWNLOAD: [
+                "Countdownをダウンロードして、iPhone、iPad、またはMacでカウントダウンを作成します。",
+              ],
+              plural: () => 0,
+            },
+            zhHans: {
+              D: ["天"],
+              H: ["小时"],
+              M: ["分钟"],
+              S: ["秒钟"],
+              IN: ["于"],
+              AGO: ["前"],
+              DOWNLOAD: ["下载 Countdown，在 iPhone、iPad 或 Mac 上创建倒计时。"],
+              plural: () => 0,
+            },
+            zhHant: {
+              D: ["天"],
+              H: ["小時"],
+              M: ["分鐘"],
+              S: ["秒"],
+              IN: ["還有"],
+              AGO: ["前"],
+              DOWNLOAD: ["下載 Countdown，在 iPhone、iPad 或 Mac 上建立倒數計時。"],
+              plural: () => 0,
+            },
+            tr: {
+              D: [" GÜN", " GÜN"],
+              H: [" SAAT", " SAAT"],
+              M: [" DAKİKA", " DAKİKA"],
+              S: [" SANİYE", " SANİYE"],
+              IN: ["İÇİNDE"],
+              AGO: ["ÖNCE"],
+              DOWNLOAD: [
+                "iPhone, iPad veya Mac’te geri sayım oluşturmak için Countdown’i indirin.",
+              ],
+              plural: () => 0,
+            },
+            es: {
+              D: [" DÍA", " DÍAS"],
+              H: [" HORA", " HORAS"],
+              M: [" MINUTO", " MINUTOS"],
+              S: [" SEGUNDO", " SEGUNDOS"],
+              IN: ["EN"],
+              AGO: ["HACE"],
+              DOWNLOAD: [
+                "Descarga Countdown para crear una cuenta atrás en iPhone, iPad o Mac.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            ptBR: {
+              D: [" DIA", " DIAS"],
+              H: [" HORA", " HORAS"],
+              M: [" MINUTO", " MINUTOS"],
+              S: [" SEGUNDO", " SEGUNDOS"],
+              IN: ["EM"],
+              AGO: ["ATRÁS"],
+              DOWNLOAD: [
+                "Baixe o Countdown para criar uma contagem regressiva no iPhone, iPad ou Mac.",
+              ],
+              plural: (nr) => (nr == 1 ? 0 : 1),
+            },
+            ko: {
+              D: ["일"],
+              H: ["시간"],
+              M: ["분"],
+              S: ["초"],
+              IN: ["후"],
+              AGO: ["전"],
+              DOWNLOAD: [
+                "Countdown를 다운로드하여 iPhone, iPad 또는 Mac에서 카운트다운을 만드세요.",
+              ],
+              plural: () => 0,
+            },
+            ru: {
+              D: [" ДЕНЬ", " ДНЯ", " ДНЕЙ"],
+              H: [" ЧАС", " ЧАСА", " ЧАСОВ"],
+              M: [" МИНУТА", " МИНУТЫ", " МИНУТ"],
+              S: [" СЕКУНДА", " СЕКУНДЫ", " СЕКУНД"],
+              IN: ["ЧЕРЕЗ"],
+              AGO: ["НАЗАД"],
+              DOWNLOAD: [
+                "Скачайте Countdown, чтобы создать обратный отсчёт на iPhone, iPad или Mac.",
+              ],
+              plural: (nr) => {
+                const n = Math.abs(nr) % 100;
+                const n1 = n % 10;
+                if (n > 10 && n < 20) return 2;
+                if (n1 > 1 && n1 < 5) return 1;
+                if (n1 == 1) return 0;
+                return 2;
+              },
+            },
+          },
+          translate(localeKey, value) {
+            const activeLocale = this.locales[this.currentLocale] || this.locales.en;
+            const translation = activeLocale[localeKey] || this.locales.en[localeKey];
+            return translation[activeLocale.plural(value)];
+          },
+        };
+
+        const daysWrapper = $("#daysWrapper");
+        const hoursWrapper = $("#hoursWrapper");
+        const minutesWrapper = $("#minutesWrapper");
+        const secondsWrapper = $("#secondsWrapper");
+        const agoLabel = $("#tp-countdown-ago");
+        const inLabel = $("#tp-countdown-in");
+        const knownIconNames = [
+          "AmericanFootball",
+          "Anxious",
+          "Baby",
+          "Baseball",
+          "Basketball",
+          "Bells",
+          "Birthday",
+          "Car",
+          "Celebration",
+          "Champagne",
+          "Competition",
+          "Cruise",
+          "Dinner",
+          "Excited",
+          "Flag",
+          "Game",
+          "Gloves",
+          "Hiking",
+          "Offroad",
+          "Party",
+          "Popcorn",
+          "Ribbon",
+          "Rings",
+          "Romance",
+          "Shopping",
+          "Snow",
+          "Sport",
+          "Study",
+          "Travel",
+          "Wave",
+          "Work",
+        ];
+        const canonicalIconByLower = knownIconNames.reduce((acc, name) => {
+          acc[name.toLowerCase()] = name;
+          return acc;
+        }, {});
+
+        const resolveIconName = (iconValue) => {
+          const safeIcon = (iconValue || "").replace(/[^a-zA-Z0-9_-]/g, "");
+          if (!safeIcon) return null;
+          return canonicalIconByLower[safeIcon.toLowerCase()] || null;
+        };
+
+        const init = async () => {
+          const themeConfig = await loadThemeConfig();
+          const resolvedThemeColors = resolveThemeColors(
+            queryParams.get("color"),
+            queryParams.get("foregroundColor"),
+            queryParams.get("highlightColor"),
+            queryParams.get("theme"),
+            themeConfig,
+          );
+
+          applyTheme(
+            resolvedThemeColors.background,
+            resolvedThemeColors.foreground,
+            resolvedThemeColors.highlight,
+          );
+
+          const icon = queryParams.get("icon");
+          const resolvedIconName = resolveIconName(icon);
+          if (resolvedIconName) {
+            $("#tp-countdown-icon").attr("src", "./images/" + resolvedIconName + ".png");
+          } else {
+            $("#tp-countdown-icon").detach();
+          }
+
+          document.getElementById("tp-countdown-ago").textContent = localization.translate("AGO", 1);
+          document.getElementById("tp-download-text").textContent = localization.translate(
+            "DOWNLOAD",
+            1,
+          );
+
+          const title = queryParams.get("title");
+          if (title) {
+            document.getElementById("tp-countdown-in").textContent = localization.translate("IN", 1);
+            document.getElementById("tp-countdown-event-title").textContent = title;
+
+            const pageTitle = title + " via Countdown";
+            document.title = pageTitle;
+            const ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) {
+              ogTitle.setAttribute("content", pageTitle);
+            }
+          } else {
+            document.getElementById("tp-countdown-in").textContent = "";
+            document.title = "Countdown";
+          }
+
+          updateTargetDateLabel(targetDate, locale, timeZone, isAllDay);
+
           $(".ce-countdown").countEverest({
             day: targetParts.day,
             month: targetParts.month,
@@ -560,14 +549,14 @@
             minute: isAllDay ? 0 : targetParts.minute,
             second: isAllDay ? 0 : targetParts.second,
             singularLabels: true,
-            daysLabel: Localization.translate("D", 2),
-            dayLabel: Localization.translate("D", 1),
-            hoursLabel: Localization.translate("H", 2),
-            hourLabel: Localization.translate("H", 1),
-            minutesLabel: Localization.translate("M", 2),
-            minuteLabel: Localization.translate("M", 1),
-            secondsLabel: Localization.translate("S", 2),
-            secondLabel: Localization.translate("S", 1),
+            daysLabel: localization.translate("D", 2),
+            dayLabel: localization.translate("D", 1),
+            hoursLabel: localization.translate("H", 2),
+            hourLabel: localization.translate("H", 1),
+            minutesLabel: localization.translate("M", 2),
+            minuteLabel: localization.translate("M", 1),
+            secondsLabel: localization.translate("S", 2),
+            secondLabel: localization.translate("S", 1),
             timeZone: timezoneOffset,
             countUp: true,
             onChange: function () {
@@ -604,12 +593,12 @@
                 inLabel.detach();
               }
             },
-            onComplete: function () {
-              // no-op
-            },
+            onComplete: function () {},
           });
-        });
-      });
+        };
+
+        init();
+      })();
     </script>
   </body>
 </html>
