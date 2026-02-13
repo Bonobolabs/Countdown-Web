@@ -1,0 +1,29 @@
+{
+  "themes": {
+    "classic": {
+      "background": "#15C2B4",
+      "foreground": "#1A1A1A",
+      "highlight": "#0A84FF"
+    },
+    "forest": {
+      "background": "#199B7F",
+      "foreground": "#1E2A1F",
+      "highlight": "#38B687"
+    },
+    "midnight": {
+      "background": "#0B0B10",
+      "foreground": "#E6E6E6",
+      "highlight": "#64D2FF"
+    },
+    "ocean": {
+      "background": "#4C74B4",
+      "foreground": "#A7E6EB",
+      "highlight": "#00B3C7"
+    },
+    "sunset": {
+      "background": "#EB4D0B",
+      "foreground": "#E8D651",
+      "highlight": "#FF6B6B"
+    }
+  }
+}

@@ -2,6 +2,11 @@
 
 :root {
   font-size: min(2.8vh, min(3.8vw, 16px));
+  --theme-bg: #1d2424;
+  --theme-fg: #ffffff;
+  --theme-highlight: #64d2ff;
+  --theme-fg-muted: rgba(255, 255, 255, 0.84);
+  --theme-chip-bg: rgba(0, 0, 0, 0.35);
 }
 
 :root,
@@ -9,8 +14,8 @@ body {
   height: 100svh;
   margin: 0;
   padding: 0;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--theme-bg);
+  color: var(--theme-fg);
 }
 
 body {
@@ -26,7 +31,7 @@ main {
   align-items: center;
   justify-content: center;
   padding: 5vmin 0;
-  background: #1d2424;
+  background: var(--theme-bg);
 }
 
 footer {
@@ -37,7 +42,12 @@ footer {
   padding: 5vmin;
   font-size: 1.5rem;
   text-align: center;
-  background: black;
+  color: var(--theme-fg);
+  background: var(--theme-bg);
+}
+
+footer a {
+  color: inherit;
 }
 
 /* Countdown ------------------------------------------------------------------- */
@@ -47,33 +57,33 @@ footer {
   text-align: center;
 }
 
-/* Timepage theme -------------------------------------------------------------- */
-/* TODO: Font for Non-Mac/iOS viewers without Avenir Next */
+/* Countdown theme ------------------------------------------------------------- */
+/* TODO: Font for non-Apple viewers without Avenir Next */
 
 main,
-.timepage-theme,
+.countdown-theme,
 #tp-countdown-in,
 #tp-countdown-event-title,
 #tp-download-text {
   font-family: "Nunito Sans", sans-serif;
 }
 
-.timepage-theme {
+.countdown-theme {
   text-align: center;
   text-transform: lowercase;
 }
 
-.timepage-theme .ce-days,
-.timepage-theme .ce-hours,
-.timepage-theme .ce-minutes,
-.timepage-theme .ce-seconds {
+.countdown-theme .ce-days,
+.countdown-theme .ce-hours,
+.countdown-theme .ce-minutes,
+.countdown-theme .ce-seconds {
   font-weight: 600;
 }
 
-.timepage-theme .ce-days-label,
-.timepage-theme .ce-hours-label,
-.timepage-theme .ce-minutes-label,
-.timepage-theme .ce-seconds-label {
+.countdown-theme .ce-days-label,
+.countdown-theme .ce-hours-label,
+.countdown-theme .ce-minutes-label,
+.countdown-theme .ce-seconds-label {
   font-weight: 200;
   text-transform: uppercase;
 }
@@ -97,6 +107,7 @@ main,
   font-size: 1.5rem;
   font-weight: 200;
   text-align: center;
+  color: var(--theme-fg-muted);
 }
 
 .tp-countdown-date-container {
@@ -113,7 +124,8 @@ main,
   font-size: 1.5rem;
   font-weight: 200;
   text-align: center;
-  background-color: #000;
+  color: var(--theme-fg);
+  background-color: var(--theme-chip-bg);
   border-radius: 4vmin;
 }
 
@@ -122,13 +134,14 @@ main,
   padding-bottom: 1vmin;
   font-size: 4rem;
   line-height: 1;
-  color: #ff1f00;
+  color: var(--theme-highlight);
 }
 
 #tp-countdown-bottom-line {
   display: block;
   font-size: 1.3rem;
   line-height: 1;
+  color: var(--theme-fg-muted);
 }
 
 #tp-app-icon {
@@ -137,6 +150,7 @@ main,
   min-width: 90px;
   max-width: 180px;
   margin: auto;
+  border-radius: 18%;
 }
 
 #app-store-button {
@@ -153,6 +167,7 @@ main,
   padding: 2vmin;
   font-size: 1.3rem;
   font-weight: 200;
+  color: var(--theme-fg-muted);
 }
 
 /* Media queries --------------------------------------------------------------- */
