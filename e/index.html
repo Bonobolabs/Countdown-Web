@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Countdown</title>
+    <meta name="theme-color" content="#1D2424" />
+    <meta property="og:title" content="Countdown" />
+    <meta property="og:image" content="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="Install Countdown to open shared event links and countdown links."
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,600&amp;subset=latin-ext"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --theme-bg: #1d2424;
+        --theme-fg: #ffffff;
+        --theme-highlight: #64d2ff;
+        --theme-fg-muted: rgba(255, 255, 255, 0.84);
+        --theme-chip-bg: rgba(0, 0, 0, 0.35);
+      }
+
+      .landing-main {
+        padding: 6vmin 6vmin 0;
+      }
+
+      .landing-icon {
+        width: 6rem;
+        height: 6rem;
+        border-radius: 20%;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      .landing-title {
+        margin-top: 0.25rem;
+      }
+
+      .landing-message {
+        margin-top: 1.2rem;
+        padding: 0.8rem 1.25rem;
+        border-radius: 999px;
+        background: var(--theme-chip-bg);
+        color: var(--theme-fg);
+        font-size: 1.1rem;
+        font-weight: 200;
+        text-align: center;
+      }
+
+      .landing-subtext {
+        margin-top: 0.75rem;
+        max-width: 34rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="landing-main">
+      <img
+        class="landing-icon"
+        src="/apple-touch-icon.png"
+        alt="Countdown app icon"
+      />
+      <div id="tp-countdown-title-container">
+        <div id="tp-countdown-event-title" class="landing-title">Countdown</div>
+      </div>
+      <div class="landing-message">Open this shared event in the Countdown app</div>
+      <span id="tp-download-text" class="landing-subtext"
+        >Install Countdown to view this event link and create your own shared countdowns.</span
+      >
+    </main>
+
+    <footer>
+      <a
+        href="https://apps.apple.com/app/apple-store/id989178902?pt=542023&ct=mdshome&mt=8&ct=countdown"
+        aria-label="Download Countdown from the App Store"
+      >
+        <img id="app-store-button" src="/images/appstore.png" alt="Download on the App Store" />
+      </a>
+    </footer>
+  </body>
+</html>
