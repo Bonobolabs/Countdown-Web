@@ -5,25 +5,75 @@
       "foreground": "#1A1A1A",
       "highlight": "#0A84FF"
     },
+    "cobalt": {
+      "background": "#1F3A8A",
+      "foreground": "#EAF2FF",
+      "highlight": "#60A5FA"
+    },
+    "dawn": {
+      "background": "#FEC89A",
+      "foreground": "#3B1F2B",
+      "highlight": "#D7263D"
+    },
+    "ember": {
+      "background": "#7A1C1C",
+      "foreground": "#FFE8D6",
+      "highlight": "#FF8A3D"
+    },
     "forest": {
       "background": "#199B7F",
       "foreground": "#1E2A1F",
       "highlight": "#38B687"
+    },
+    "graphite": {
+      "background": "#2B2D42",
+      "foreground": "#F1F3F5",
+      "highlight": "#8D99AE"
+    },
+    "lagoon": {
+      "background": "#0E7490",
+      "foreground": "#E0F7FA",
+      "highlight": "#22D3EE"
     },
     "midnight": {
       "background": "#0B0B10",
       "foreground": "#E6E6E6",
       "highlight": "#64D2FF"
     },
+    "moss": {
+      "background": "#2F5D50",
+      "foreground": "#EAF4EA",
+      "highlight": "#9AD1A5"
+    },
     "ocean": {
       "background": "#4C74B4",
       "foreground": "#A7E6EB",
       "highlight": "#00B3C7"
     },
+    "plum": {
+      "background": "#5A3E6B",
+      "foreground": "#F8EAFD",
+      "highlight": "#C3A6FF"
+    },
+    "rose": {
+      "background": "#F9C6D3",
+      "foreground": "#4A1F2C",
+      "highlight": "#E63973"
+    },
+    "sand": {
+      "background": "#E9D8A6",
+      "foreground": "#3C2F1E",
+      "highlight": "#D97706"
+    },
     "sunset": {
       "background": "#EB4D0B",
       "foreground": "#E8D651",
       "highlight": "#FF6B6B"
+    },
+    "tidal": {
+      "background": "#DDF6FF",
+      "foreground": "#1E3A5F",
+      "highlight": "#00A6ED"
     }
   }
 }
